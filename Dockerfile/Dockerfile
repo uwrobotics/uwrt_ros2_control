@@ -16,6 +16,7 @@ COPY . /home/ros2_ws/src/ros2_control_demos
 RUN cd /home/ros2_ws/src \
     && rosdep update --rosdistro ${ROS_DISTRO}  \
     && apt-get update \
+    && apt-get install nlohmann-json3-dev \
     && rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO} \
     --skip-keys ros-${ROS_DISTRO}-joint-state-publisher-gui --skip-keys ros-${ROS_DISTRO}-rviz2\
     && \

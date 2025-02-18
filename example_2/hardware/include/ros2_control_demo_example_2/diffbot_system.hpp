@@ -1,3 +1,4 @@
+// diffbot_system.hpp
 // Copyright 2021 ros2_control Development Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +20,7 @@
 #include <string>
 #include <vector>
 
+#include "rclcpp/rclcpp.hpp"
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
@@ -29,7 +31,10 @@
 #include "rclcpp/macros.hpp"
 #include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
+#include "rclcpp_lifecycle/lifecycle_publisher.hpp"
 #include "rclcpp_lifecycle/state.hpp"
+#include <nlohmann/json.hpp>
+#include "std_msgs/msg/string.hpp"
 
 namespace ros2_control_demo_example_2
 {
@@ -42,31 +47,19 @@ public:
     const hardware_interface::HardwareInfo & info) override;
 
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
-
   std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
-
   hardware_interface::CallbackReturn on_activate(
     const rclcpp_lifecycle::State & previous_state) override;
-
   hardware_interface::CallbackReturn on_deactivate(
     const rclcpp_lifecycle::State & previous_state) override;
-
   hardware_interface::return_type read(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
-
   hardware_interface::return_type write(
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
   /// Get the logger of the SystemInterface.
-  /**
-   * \return logger of the SystemInterface.
-   */
   rclcpp::Logger get_logger() const { return *logger_; }
-
   /// Get the clock of the SystemInterface.
-  /**
-   * \return clock of the SystemInterface.
-   */
   rclcpp::Clock::SharedPtr get_clock() const { return clock_; }
 
 private:
@@ -74,11 +67,15 @@ private:
   double hw_start_sec_;
   double hw_stop_sec_;
 
-  // Objects for logging
+  // Objects for logging and time
   std::shared_ptr<rclcpp::Logger> logger_;
+  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr json_publisher_;
   rclcpp::Clock::SharedPtr clock_;
 
-  // Store the command for the simulated robot
+  // For this testing example, we store our own node pointer.
+  rclcpp::Node::SharedPtr node_;
+
+  // Storage for the simulated robot's joint data
   std::vector<double> hw_commands_;
   std::vector<double> hw_positions_;
   std::vector<double> hw_velocities_;

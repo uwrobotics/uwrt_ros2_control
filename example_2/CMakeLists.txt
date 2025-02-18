@@ -19,6 +19,8 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
 # find dependencies
 find_package(backward_ros REQUIRED)
 find_package(ament_cmake REQUIRED)
+find_package(nlohmann_json REQUIRED)
+find_package(std_msgs REQUIRED)
 foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
 endforeach()
@@ -72,5 +74,6 @@ endif()
 
 ## EXPORTS
 ament_export_targets(export_ros2_control_demo_example_2 HAS_LIBRARY_TARGET)
-ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
+ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS}
+  std_msgs)
 ament_package()
