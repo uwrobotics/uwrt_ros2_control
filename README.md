@@ -1,13 +1,39 @@
 # Todo:
+
 write a sub for decoding the message published
 
 ## command for setup:
-''' bash
+
 docker build . -t ros2_control_demos -f Dockerfile/Dockerfile
 
 docker run -it --rm --name ros2_control_demos --net host ros2_control_demos ros2 launch ros2_control_demo_example_2 diffbot.launch.py
-'''
 
+ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "
+twist:
+linear:
+x: 0.7
+y: 0.0
+z: 0.0
+angular:
+x: 0.0
+y: 0.0
+z: 1.0"
+
+Note:
+
+All the subscriber and publisher information are defined in this file:
+example_2/bringup/launch/diffbot.launch.py
+
+key highlights:
+
+sub to /cmd_vel
+
+publish to /joint_state
+
+
+All the dynamics information are defined in this file
+
+example_2/bringup/config/diffbot_controllers.yaml
 
 # ros2_control Demos
 
@@ -22,72 +48,54 @@ If you want to have rather step by step manual how to do things with `ros2_contr
 
 Follow the steps provided in the [documentation](https://control.ros.org/humble/doc/ros2_control_demos/doc/index.html#installation) to install ros2_control_demos.
 
-
 ## Content
 
 The following examples are part of this demo repository:
 
 * Example 1: [*RRBot*](example_1)
 
-   *RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot with one hardware interface. This example also demonstrates the switching between different controllers.
-
-
+  *RRBot* - or ''Revolute-Revolute Manipulator Robot'' - a simple position controlled robot with one hardware interface. This example also demonstrates the switching between different controllers.
 * Example 2: [*DiffBot*](example_2)
 
-   *DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
-   The robot is basically a box moving according to differential drive kinematics.
-
-
+  *DiffBot*, or ''Differential Mobile Robot'', is a simple mobile base with differential drive.
+  The robot is basically a box moving according to differential drive kinematics.
 * Example 3: ["RRBot with multiple interfaces"](example_3)
 
-   *RRBot* with multiple interfaces.
-
-
+  *RRBot* with multiple interfaces.
 * Example 4: ["Industrial robot with integrated sensor"](example_4)
 
-   *RRBot* with an integrated sensor.
-
+  *RRBot* with an integrated sensor.
 * Example 5: ["Industrial robots with externally connected sensor"](example_5)
 
-   *RRBot* with an externally connected sensor.
-
+  *RRBot* with an externally connected sensor.
 * Example 6: ["Modular robots with separate communication to each actuator"](example_6)
 
-   The example shows how to implement robot hardware with separate communication to each actuator.
-
+  The example shows how to implement robot hardware with separate communication to each actuator.
 * Example 7: ["6-DOF robot"](example_7)
 
-   A full tutorial for a 6 DOF robot for intermediate ROS 2 users.
-
+  A full tutorial for a 6 DOF robot for intermediate ROS 2 users.
 * Example 8: ["Using transmissions"](example_8)
 
-   *RRBot* with an exposed transmission interface.
-
+  *RRBot* with an exposed transmission interface.
 * Example 9: ["Gazebo classic simulation"](example_9)
 
-   Demonstrates how to switch between simulation and hardware.
-
+  Demonstrates how to switch between simulation and hardware.
 * Example 10: ["Industrial robot with GPIO interfaces"](example_10)
 
-   *RRBot* with GPIO interfaces.
-
+  *RRBot* with GPIO interfaces.
 * Example 11: ["Car-like robot using steering controller library"](example_11)
-
 * Example 12: ["Controller chaining"](example_12)
 
-   The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
-
+  The example shows a simple chainable controller and its integration to form a controller chain to control the joints of *RRBot*.
 * Example 13: ["Multi-robot system with hardware lifecycle management"](example_13)
 
-   This example shows how to handle multiple robots in a single controller manager instance.
-
+  This example shows how to handle multiple robots in a single controller manager instance.
 * Example 14: ["Modular robots with actuators not providing states and with additional sensors"](example_14)
 
-   The example shows how to implement robot hardware with actuators not providing states and with additional sensors.
-
+  The example shows how to implement robot hardware with actuators not providing states and with additional sensors.
 * Example 15: ["Using multiple controller managers"](example_15)
 
-   This example shows how to integrate multiple robots under different controller manager instances.
+  This example shows how to integrate multiple robots under different controller manager instances.
 
 ## Structure
 
@@ -112,18 +120,19 @@ The important files to check in each example are:
 - `controllers/<example_name>.cpp` - source file with the example controller implementation.
 
 **NOTE** - The structure of packages, folders and files given in this repository is not recommended to be used for your robot. Usually you should have all of the above folders defined as separate packages with naming convention `<robot_name_or_type>/[bringup|description|hardware|controllers]`.
-  More standard structure can be found in [ros_control_boilerplate](https://github.com/PickNikRobotics/ros_control_boilerplate) repository from Dave Coleman or documentation on [ros_team_workspace](https://rtw.stoglrobotics.de/master/guidelines/robot_package_structure.html) from Stogl Robotics.
+More standard structure can be found in [ros_control_boilerplate](https://github.com/PickNikRobotics/ros_control_boilerplate) repository from Dave Coleman or documentation on [ros_team_workspace](https://rtw.stoglrobotics.de/master/guidelines/robot_package_structure.html) from Stogl Robotics.
 
 The concepts in this package are demonstrated on the examples of *RRBot* and *DiffBot*.
 Those two world-known imaginary robots are trivial simulations to demonstrate and test `ros2_control` concepts.
 
 ## Build status
 
-ROS 2 Distro | Branch | Build status | Documentation
-:----------: | :----: | :----------: | :-----------:
-**Rolling** | [`master`](https://github.com/ros-controls/ros2_control_demos/tree/master) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml?branch=master) <br /> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml?branch=master) <br /> | [Documentation](https://control.ros.org/master/index.html) <br /> [API Reference](https://control.ros.org/master/doc/api/index.html)
-**Jazzy** | [`master`](https://github.com/ros-controls/ros2_control_demos/tree/master) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml?branch=master) <br /> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml?branch=master) <br /> | [Documentation](https://control.ros.org/master/index.html) <br /> [API Reference](https://control.ros.org/jazzy/doc/api/index.html)
-**Humble** | [`humble`](https://github.com/ros-controls/ros2_control_demos/tree/humble) | [![Humble Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-binary-build.yml/badge.svg?branch=humble)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-binary-build.yml?branch=humble) <br /> [![Humble Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-semi-binary-build.yml/badge.svg?branch=humble)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-semi-binary-build.yml?branch=humble) <br /> | [Documentation](https://control.ros.org/humble/index.html) <br />[API Reference](https://control.ros.org/humble/doc/api/index.html)
+
+| ROS 2 Distro |                                   Branch                                   |                                                                                                                                                                                                                                                                       Build status                                                                                                                                                                                                                                                                       |                                                            Documentation                                                            |
+| :----------: | :------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------: |
+| **Rolling** | [`master`](https://github.com/ros-controls/ros2_control_demos/tree/master) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml?branch=master) <br /> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml?branch=master) <br /> | [Documentation](https://control.ros.org/master/index.html) <br /> [API Reference](https://control.ros.org/master/doc/api/index.html) |
+|  **Jazzy**  | [`master`](https://github.com/ros-controls/ros2_control_demos/tree/master) | [![Rolling Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-binary-build.yml?branch=master) <br /> [![Rolling Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml/badge.svg?branch=master)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/rolling-semi-binary-build.yml?branch=master) <br /> | [Documentation](https://control.ros.org/master/index.html) <br /> [API Reference](https://control.ros.org/jazzy/doc/api/index.html) |
+|  **Humble**  | [`humble`](https://github.com/ros-controls/ros2_control_demos/tree/humble) |    [![Humble Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-binary-build.yml/badge.svg?branch=humble)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-binary-build.yml?branch=humble) <br /> [![Humble Semi-Binary Build](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-semi-binary-build.yml/badge.svg?branch=humble)](https://github.com/ros-controls/ros2_control_demos/actions/workflows/humble-semi-binary-build.yml?branch=humble) <br />    | [Documentation](https://control.ros.org/humble/index.html) <br />[API Reference](https://control.ros.org/humble/doc/api/index.html) |
 
 ### Explanation of different build types
 
@@ -132,10 +141,8 @@ ROS 2 Distro | Branch | Build status | Documentation
 1. Binary builds - against released packages (main and testing) in ROS distributions. Shows that direct local build is possible.
 
    Uses repos file: `src/$NAME$/$NAME$-not-released.<ros-distro>.repos`
-
-1. Semi-binary builds - against released core ROS packages (main and testing), but the immediate dependencies are pulled from source.
+2. Semi-binary builds - against released core ROS packages (main and testing), but the immediate dependencies are pulled from source.
    Shows that local build with dependencies is possible and if fails there we can expect that after the next package sync we will not be able to build.
 
    Uses repos file: `src/$NAME$/$NAME$.repos`
-
-1. Source build - also core ROS packages are build from source. It shows potential issues in the mid future.
+3. Source build - also core ROS packages are build from source. It shows potential issues in the mid future.

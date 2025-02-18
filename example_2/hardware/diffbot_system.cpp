@@ -43,12 +43,6 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
   if (!rclcpp::ok()) {
     rclcpp::init(0, nullptr);
   }
-  
-  // Create our own node if one hasn't been provided.
-  // (This is not typical; normally the node is passed in externally.)
-  if (!node_) {
-    node_ = rclcpp::Node::make_shared("diffbot_internal_node");
-  }
 
   // Set up logger and clock.
   logger_ = std::make_shared<rclcpp::Logger>(rclcpp::get_logger("DiffBotSystemHardware"));
@@ -61,10 +55,7 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
   hw_positions_.resize(info.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_velocities_.resize(info.joints.size(), std::numeric_limits<double>::quiet_NaN());
   hw_commands_.resize(info.joints.size(), std::numeric_limits<double>::quiet_NaN());
-
-  // Use our node pointer to create the publisher.
-  json_publisher_ = node_->create_publisher<std_msgs::msg::String>("publish_vel", 10);
-
+  
   // Validate joint interfaces (simplified checks).
   for (const auto & joint : info.joints)
   {
