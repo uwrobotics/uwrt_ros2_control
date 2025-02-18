@@ -181,19 +181,14 @@ hardware_interface::return_type DiffBotSystemHardware::read(
 hardware_interface::return_type DiffBotSystemHardware::write(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
 {
-  nlohmann::json msg;
   std::stringstream ss;
   ss << "Writing commands:";
   for (size_t i = 0; i < hw_commands_.size(); i++)
   {
-    msg[info_.joints[i].name] = hw_commands_[i];
     hw_velocities_[i] = hw_commands_[i];
     ss << std::fixed << std::setprecision(2) << std::endl
        << "\tcommand " << hw_commands_[i] << " for '" << info_.joints[i].name << "'!";
   }
-  std_msgs::msg::String pub_msg;
-  pub_msg.data = msg.dump();
-  json_publisher_->publish(pub_msg);
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
   return hardware_interface::return_type::OK;
 }

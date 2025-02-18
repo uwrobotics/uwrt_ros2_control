@@ -69,11 +69,7 @@ private:
 
   // Objects for logging and time
   std::shared_ptr<rclcpp::Logger> logger_;
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr json_publisher_;
   rclcpp::Clock::SharedPtr clock_;
-
-  // For this testing example, we store our own node pointer.
-  rclcpp::Node::SharedPtr node_;
 
   // Storage for the simulated robot's joint data
   std::vector<double> hw_commands_;
